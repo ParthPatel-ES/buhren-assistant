@@ -33,7 +33,7 @@ class RAGPipeline:
         vector_store: VectorStore,
         model_name: str = "model-name-here",
         max_new_tokens: int = 1024,
-        temperature: float = 0.85
+        temperature: float = 0.85 # 0.15 for more deterministic output, 0.85 for more creative output
     ):
         """
         Initialize the RAG pipeline.
@@ -72,14 +72,16 @@ class RAGPipeline:
                 "lm_head": 0,
                 "transformer.h": "cpu"  # Offload transformer layers to CPU
             }
-            print('-----\n\n\n')
+
             self.model = AutoModelForCausalLM.from_pretrained(
                 model_name,
-                # device_map=device_map,  # Use custom device mapping
-                quantization_config=quantization_config,
+                quantization_config=quantization_config, # TODO remove hardcoded quantization
                 trust_remote_code=True,
                 low_cpu_mem_usage=True
             )
+            # Set pad_token_id explicitly
+            self.tokenizer.pad_token = self.tokenizer.eos_token  # Use eos_token as pad token if no pad token exists
+            self.model.config.pad_token_id = self.tokenizer.pad_token_id  # Set pad_token_id in model config
             
             # Create text generation pipeline
             self.generation_pipeline = pipeline(
@@ -89,9 +91,9 @@ class RAGPipeline:
                 max_new_tokens=max_new_tokens,
                 temperature=temperature,
                 trust_remote_code=True,
-                device_map=device_map,
+                device_map=device_map, # TODO: remove hardcoded cpu execution
                 do_sample=True,
-                top_p=0.95,
+                top_p=0.9,
             )
             
             logger.info(f"Loaded language model: {model_name}")

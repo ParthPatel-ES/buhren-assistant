@@ -60,9 +60,19 @@ def setup_argparse() -> argparse.Namespace:
     parser.add_argument(
         "--embedding_model", 
         type=str, 
-        # default="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        default="sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2", # TODO best but large
+        # default="mixedbread-ai/deepset-mxbai-embed-de-large-v1",
+        # default="sentence-transformers/all-MiniLM-L6-v2",
         help="Hugging Face model ID for embeddings"
     )
+    parser.add_argument(
+        "--language_model", 
+        type=str, 
+        default="openGPT-X/Teuken-7B-instruct-commercial-v0.4",
+        # default="LeoLM/leo-mistral-hessianai-7b",
+        # default='meta-llama/Llama-4-Scout-17B-16E-Instruct',
+        help="Hugging Face model ID for language model"
+    )    
     return parser.parse_args()
 
 def main():
@@ -86,7 +96,8 @@ def main():
         # Initialize RAG pipeline
         rag_pipeline = RAGPipeline(
             document_processor=doc_processor,
-            vector_store=vector_store
+            vector_store=vector_store,
+            model_name=args.language_model
         )
         
         # Process documents and build index

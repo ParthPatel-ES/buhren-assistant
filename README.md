@@ -32,8 +32,8 @@ The system is built with a modular design:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/german-document-rag.git
-   cd german-document-rag
+   git clone https://github.com/ParthPatel-ES/buhren-assistant.git
+   cd buhren-assistant
    ```
 
 2. Create a virtual environment:
@@ -60,7 +60,7 @@ The system is built with a modular design:
 
 2. Run the system:
    ```
-   python -m german_document_rag.main --docs_dir documents/ --vector_db_path vector_db/
+   python -m app.py --docs_dir documents/ --vector_db_path vector_db/
    ```
 
 3. Ask questions in the interactive interface.
