@@ -22,6 +22,13 @@ The system is built with a modular design:
 4. **Chat Interface**: Provides a user-friendly interface for interacting with the system.
 
 ## Installation
+### Set up with Docker (Windows):
+
+1. Download and Install Docker Desktop
+
+2. Run `start_build.bat`
+
+3. Run `start_app.bat`
 
 ### Prerequisites
 
